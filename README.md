@@ -27,16 +27,24 @@ This repository implements a **multimodal deep learning pipeline** for stance de
 
 ## 📊 **Dataset**
 
-The dataset contains Telugu political memes in Excel format with:
-- **Images**: Political meme images (full_path column)
-- **Text**: Extracted OCR text from images (Image Text column)
-- **Targets**: Political figures/parties (TARGET_1 column)
-- **Stances**: Labeled as favour/against/none (STANCE_1 column)
-
-**Dataset Statistics** (from your analysis):
-- **28 unique political targets** (e.g., Modi, Jagan, Pawan Kalyan, BJP, Congress)
+The dataset consists of Telugu political memes with:
+- **Images**: Political meme images (download from Google Drive link below)
+- **Metadata**: CSV file with extracted text, targets, and stances
+- **Unique Targets**: 28 political figures/parties (e.g., Modi, Jagan Mohan Reddy, Pawan Kalyan, BJP, Congress)
 - **3-class classification**: Favour, Against, Neutral
-- **Multimodal**: Both image + text features
+
+### Download Instructions
+1. **Images** (Train Images Folder):
+   - Download from: [Google Drive Folder](https://drive.google.com/drive/folders/1UmbQs5tzVdaJbvvgSfjHkYz1p46be1_Q?usp=drive_link)
+   - Extract to a local folder, e.g., `./data/images/` (update `full_path` in CSV if needed)
+   - ~[Number of images, e.g., 1,000+] JPG/PNG files of memes
+
+2. **Metadata** (Train CSV):
+   - Download from: [Google Sheets - Train_data](https://docs.google.com/spreadsheets/d/1LsP8deyiLG4g_IWAT-oUREHiuuzLBKVY6KdfQoYw8y8/edit?usp=sharing)
+   - Export as CSV and save to `./data/train.csv`
+   - Columns: `full_path` (image path), `Image Text` (OCR text), `TARGET_1` (political target), `STANCE_1` (label: favour/against/none)
+
+**Note**: Update paths in `train.py` and `evaluate_all_models.py` to point to your local `./data/` folder. Ensure image paths in CSV match your local structure (e.g., `./data/images/image1.jpg`).
 
 ---
 
@@ -93,10 +101,14 @@ Linear(256→3) → Final Logits
 pip install torch torchvision transformers pandas scikit-learn pillow matplotlib seaborn openpyxl
 ```
 
-### 1. **Prepare Your Data**
-Place your Excel file at: `C:\Users\RGUKT\Downloads\Temp\output.xlsx`
-- Must contain columns: `full_path`, `Image Text`, `TARGET_1`, `STANCE_1`
-- Images must be accessible via `full_path`
+### 1. **Setup Dataset**
+- Download images to `./data/images/`
+- Download CSV to `./data/train.csv`
+- Update paths in scripts:
+  ```python
+  TRAIN_PATH = "./data/train.csv"  # Or your Excel if using original
+  TEST_PATH = "./data/train.csv"   # Split or use same for quick testing
+  ```
 
 ### 2. **Train All Models**
 ```bash
@@ -120,11 +132,12 @@ python evaluate_all_models.py
 ## 📁 **Project Structure**
 
 ```
-telugu-meme-stance-detection/
+MEME-STANCE-DETECTION/
 ├── train.py                 # Main training script (all 3 phases)
 ├── evaluate_all_models.py   # Evaluation + visualization
 ├── data/
-│   └── output.xlsx          # Your dataset (update path in script)
+│   ├── images/              # Downloaded meme images (from Google Drive)
+│   └── train.csv            # Downloaded metadata (from Google Sheets)
 ├── saved_models/
 │   ├── text/                # Text-only models
 │   │   ├── xlm-roberta_stance.pt
@@ -155,9 +168,9 @@ telugu-meme-stance-detection/
 Edit these paths in `train.py` and `evaluate_all_models.py`:
 
 ```python
-# Update to your actual data path
-TRAIN_PATH = r"C:\Users\RGUKT\Downloads\Temp\output.xlsx"
-TEST_PATH = r"C:\Users\RGUKT\Downloads\Temp\output.xlsx"  # Same file or separate test split
+# Update to your local paths
+TRAIN_PATH = "./data/train.csv"
+TEST_PATH = "./data/train.csv"  # Same file or separate test split
 
 # Training hyperparameters (already set)
 BATCH_SIZE = 16          # Text/Vision
@@ -218,9 +231,9 @@ After running `evaluate_all_models.py`, you'll get:
 
 | Issue | Solution |
 |-------|----------|
-| **"File not found" for images** | Ensure `full_path` column contains valid image paths |
+| **"File not found" for images** | Download images from Google Drive and update `full_path` in CSV |
 | **CUDA out of memory** | Reduce `BATCH_SIZE` to 8 or 4 |
-| **Text model loading error** | Run the 6th epoch training first (Phase 1) |
+| **Text model loading error** | Run Phase 1 (text training) first |
 | **VGG19 loading error** | Ensure you trained with `models.vgg19(pretrained=True)` |
 | **Slow training** | Use GPU (CUDA) or reduce epochs |
 
@@ -258,11 +271,11 @@ If you use this code in your research, please cite:
 
 ```bibtex
 @misc{telugu_meme_stance_2024,
-  author = {Your Name},
+  author = {Vishnu917vj},
   title = {Multimodal Stance Detection in Telugu Political Memes},
   year = {2024},
   publisher = {GitHub},
-  howpublished = {\url{https://github.com/yourusername/telugu-meme-stance-detection}},
+  howpublished = {\url{https://github.com/Vishnu917vj/MEME-STANCE-DETECTION}},
   note = {Trained on 28 unique political targets using BERT + ResNet50 fusion}
 }
 ```
@@ -281,8 +294,8 @@ If you use this code in your research, please cite:
 
 ## 📞 **Contact**
 
-**Your Name** - *Your Email* - @yourtwitter  
-**Project Link**: [https://github.com/yourusername/telugu-meme-stance-detection](https://github.com/yourusername/telugu-meme-stance-detection)
+**Vishnu917vj** - *vishnu917vj@gmail.com* (or your email) - [@Vishnu917vj](https://x.com/Vishnu917vj)  
+**Project Link**: [https://github.com/Vishnu917vj/MEME-STANCE-DETECTION](https://github.com/Vishnu917vj/MEME-STANCE-DETECTION)
 
 ---
 
@@ -297,7 +310,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Hugging Face Transformers** for multilingual BERT models
 - **PyTorch** for deep learning framework
 - **Telugu NLP Community** for language resources
-- **Your University/Organization** for computational resources
+- **Google Drive/Sheets** for dataset hosting
 
 ---
 
@@ -310,7 +323,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Happy Training! 🚀**  
-*Update the paths, run the scripts, and get publication-ready results in hours.*
+*Download the dataset, update paths, run the scripts, and get publication-ready results in hours.*
 
 ---
 
