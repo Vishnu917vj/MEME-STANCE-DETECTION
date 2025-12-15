@@ -95,6 +95,12 @@ Linear(256→3) → Final Logits
 
 ## 🚀 **Quick Start**
 
+### Note on train.py
+
+- The **commented-out code** is intended for training **text-only models** for the initial **5 epochs**.
+- The **active (non-commented) code** continues from there: it trains the 5-epoch text model for a **6th epoch**, and also handles training **vision models** and **multimodal models**.
+- Important: The commented code may fail or cause issues when used for vision or multimodal training.
+
 ### Prerequisites
 ```bash
 # Python 3.8+
